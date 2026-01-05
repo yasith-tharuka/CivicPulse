@@ -9,50 +9,81 @@
                         <h2 class="text-center mb-4 fw-bold">Create Account</h2>
                         
                         <form action="/register" method="post">
-                            
+
+                            <!-- Username -->
                             <div class="mb-3">
-                                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required>
+                                <input autocomplete="off" autofocus
+                                       class="form-control {% if errors.get('username') %}is-invalid{% endif %}"
+                                       name="username" placeholder="Username" type="text" required
+                                       value="{{ username or '' }}">
+                                {% if errors.get('username') %}
+                                    <div class="invalid-feedback">
+                                        {{ errors['username'] }}
+                                    </div>
+                                {% endif %}
                             </div>
 
+                            <!-- District -->
                             <div class="mb-3">
-                                <select class="form-select" name="district" required>
-                                    <option disabled selected>Select your District</option>
-                                    <option value="Colombo">Colombo</option>
-                                    <option value="Gampaha">Gampaha</option>
-                                    <option value="Kalutara">Kalutara</option>
-                                    <option value="Kandy">Kandy</option>
-                                    <option value="Matale">Matale</option>
-                                    <option value="Nuwara Eliya">Nuwara Eliya</option>
-                                    <option value="Galle">Galle</option>
-                                    <option value="Matara">Matara</option>
-                                    <option value="Hambantota">Hambantota</option>
-                                    <option value="Jaffna">Jaffna</option>
-                                    <option value="Kilinochchi">Kilinochchi</option>
-                                    <option value="Mannar">Mannar</option>
-                                    <option value="Mullaitivu">Mullaitivu</option>
-                                    <option value="Vavuniya">Vavuniya</option>
-                                    <option value="Batticaloa">Batticaloa</option>
-                                    <option value="Ampara">Ampara</option>
-                                    <option value="Trincomalee">Trincomalee</option>
-                                    <option value="Kurunegala">Kurunegala</option>
-                                    <option value="Puttalam">Puttalam</option>
-                                    <option value="Anuradhapura">Anuradhapura</option>
-                                    <option value="Polonnaruwa">Polonnaruwa</option>
-                                    <option value="Badulla">Badulla</option>
-                                    <option value="Monaragala">Monaragala</option>
-                                    <option value="Ratnapura">Ratnapura</option>
-                                    <option value="Kegalle">Kegalle</option>
+                                <select class="form-select {% if errors.get('district') %}is-invalid{% endif %}"
+                                        name="district" required>
+                                    <option disabled {% if not district %}selected{% endif %}>Select your District</option>
+                                    <option value="Colombo" {% if district == "Colombo" %}selected{% endif %}>Colombo</option>
+                                    <option value="Gampaha" {% if district == "Gampaha" %}selected{% endif %}>Gampaha</option>
+                                    <option value="Kalutara" {% if district == "Kalutara" %}selected{% endif %}>Kalutara</option>
+                                    <option value="Kandy" {% if district == "Kandy" %}selected{% endif %}>Kandy</option>
+                                    <option value="Matale" {% if district == "Matale" %}selected{% endif %}>Matale</option>
+                                    <option value="Nuwara Eliya" {% if district == "Nuwara Eliya" %}selected{% endif %}>Nuwara Eliya</option>
+                                    <option value="Galle" {% if district == "Galle" %}selected{% endif %}>Galle</option>
+                                    <option value="Matara" {% if district == "Matara" %}selected{% endif %}>Matara</option>
+                                    <option value="Hambantota" {% if district == "Hambantota" %}selected{% endif %}>Hambantota</option>
+                                    <option value="Jaffna" {% if district == "Jaffna" %}selected{% endif %}>Jaffna</option>
+                                    <option value="Kilinochchi" {% if district == "Kilinochchi" %}selected{% endif %}>Kilinochchi</option>
+                                    <option value="Mannar" {% if district == "Mannar" %}selected{% endif %}>Mannar</option>
+                                    <option value="Mullaitivu" {% if district == "Mullaitivu" %}selected{% endif %}>Mullaitivu</option>
+                                    <option value="Vavuniya" {% if district == "Vavuniya" %}selected{% endif %}>Vavuniya</option>
+                                    <option value="Batticaloa" {% if district == "Batticaloa" %}selected{% endif %}>Batticaloa</option>
+                                    <option value="Ampara" {% if district == "Ampara" %}selected{% endif %}>Ampara</option>
+                                    <option value="Trincomalee" {% if district == "Trincomalee" %}selected{% endif %}>Trincomalee</option>
+                                    <option value="Kurunegala" {% if district == "Kurunegala" %}selected{% endif %}>Kurunegala</option>
+                                    <option value="Puttalam" {% if district == "Puttalam" %}selected{% endif %}>Puttalam</option>
+                                    <option value="Anuradhapura" {% if district == "Anuradhapura" %}selected{% endif %}>Anuradhapura</option>
+                                    <option value="Polonnaruwa" {% if district == "Polonnaruwa" %}selected{% endif %}>Polonnaruwa</option>
+                                    <option value="Badulla" {% if district == "Badulla" %}selected{% endif %}>Badulla</option>
+                                    <option value="Monaragala" {% if district == "Monaragala" %}selected{% endif %}>Monaragala</option>
+                                    <option value="Ratnapura" {% if district == "Ratnapura" %}selected{% endif %}>Ratnapura</option>
+                                    <option value="Kegalle" {% if district == "Kegalle" %}selected{% endif %}>Kegalle</option>
                                 </select>
+                                {% if errors.get('district') %}
+                                    <div class="invalid-feedback">
+                                        {{ errors['district'] }}
+                                    </div>
+                                {% endif %}
                             </div>
 
+                            <!-- Password -->
                             <div class="mb-3">
-                                <input class="form-control" name="password" placeholder="Password" type="password" required>
+                                <input class="form-control {% if errors.get('password') %}is-invalid{% endif %}"
+                                       name="password" placeholder="Password" type="password" required>
+                                {% if errors.get('password') %}
+                                    <div class="invalid-feedback">
+                                        {{ errors['password'] }}
+                                    </div>
+                                {% endif %}
                             </div>
 
+                            <!-- Confirm Password -->
                             <div class="mb-3">
-                                <input class="form-control" name="confirmation" placeholder="Confirm Password" type="password" required>
+                                <input class="form-control {% if errors.get('confirmation') %}is-invalid{% endif %}"
+                                       name="confirmation" placeholder="Confirm Password" type="password" required>
+                                {% if errors.get('confirmation') %}
+                                    <div class="invalid-feedback">
+                                        {{ errors['confirmation'] }}
+                                    </div>
+                                {% endif %}
                             </div>
 
+                            <!-- Register button -->
                             <div class="d-grid gap-2">
                                 <button class="btn btn-primary" type="submit">Register</button>
                             </div>

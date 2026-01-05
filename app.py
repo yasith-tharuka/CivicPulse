@@ -4,6 +4,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from functools import wraps
 
 # Configure application
 app = Flask(__name__)
@@ -36,10 +37,6 @@ def after_request(response):
 def index():
     
     return render_template("index.html")
-
-@app.route('/register' , methods=["GET", "POST"])
-def register():
-    return render_template('register.html')
 
 @app.route('/login' , methods=["GET", "POST"])
 def login():
@@ -79,6 +76,71 @@ def logout():
     session.clear()
     return redirect("/")
 
+@app.route('/register' , methods = ["GET","POST"])
+def register():
+    if request.method == "GET":
+        return render_template("register.html", errors={}, username="", district="")
+    if request.method == "POST":
+        errors = {}
+
+        username = request.form.get("username")
+        district = request.form.get("district")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        # Username validation
+        if not username:
+            errors["username"] = "Invalid Username"
+
+        # District validation
+        valid_districts = [
+            "Colombo", "Galle", "Kandy", "Matara", "Jaffna",
+            "Kurunegala", "Anuradhapura", "Badulla", "Ratnapura", "Trincomalee",
+            "Batticaloa", "Hambantota", "Monaragala", "Polonnaruwa", "Puttalam",
+            "Nuwara Eliya", "Ampara", "Mannar", "Kilinochchi", "Vavuniya",
+            "Mullaitivu", "Matale", "Kalutara", "Gampaha", "Kegalle"
+        ]
+        if district not in valid_districts:
+            errors["district"] = "Please Select A District From Dropdown"
+
+        # Password validation
+        if not password:
+            errors["password"] = "Invalid Password"
+        elif password != confirmation:
+            errors["confirmation"] = "Password Not Matching"
+
+        # Check if username already exists (only if username is provided)
+        if username:
+            rows = db.execute("SELECT * FROM users WHERE username = ?", (username,))
+            if len(rows) != 0:
+                errors["username"] = "Username already in Use"
+
+        # If errors exist, re-render form
+        if errors:
+            return render_template("register.html", errors=errors, username=username or "", district=district or "")
+
+        # Hash password
+        hash_pw = generate_password_hash(password) 
+
+        # Save data into 'civicpulse.db' database 'users' table 
+        # CS50 SQL library returns the row ID directly from INSERT
+        # Pass parameters as separate arguments (not as a tuple)
+        user_id = db.execute(
+            "INSERT INTO users (username, hash, district, role) VALUES (?, ?, ?, ?)",
+            username, hash_pw, district, "citizen")
+
+        # Set session variables (similar to login)
+        session["user_id"] = user_id
+        session["role"] = "citizen"
+        session["district"] = district
+        
+        return redirect("/")
+
+        
 
 
-    
+
+
+
+
+
