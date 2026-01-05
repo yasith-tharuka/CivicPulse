@@ -19,13 +19,42 @@
                     class="bi me-2" width="40" height="32" aria-hidden="true">
                     <use xlink:href="#bootstrap"></use>
                 </svg> <span class="fs-4">CivicPulse</span> </a>
-            <ul class="nav nav-pills">
-                <li class="nav-item"><a href="{{ url_for('index')}}" class="nav-link active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
-                <li class="nav-item"><a href="{{ url_for('about')}}" class="nav-link">About</a></li>
-            </ul>
+                <ul class="nav nav-pills align-items-center">
+    
+                    <li class="nav-item">
+                        <a href="{{ url_for('index') }}" 
+                           class="nav-link {{ 'active' if request.endpoint == 'index' else '' }}">Home</a>
+                    </li>
+                
+                    <li class="nav-item">
+                        <a href="{{ url_for('about') }}" 
+                           class="nav-link {{ 'active' if request.endpoint == 'about' else '' }}">About</a>
+                    </li>
+                
+                    {% if session["user_id"] %}
+                        
+                        <li class="nav-item ms-3">
+                            <span class="nav-link disabled text-muted">Signed in</span> 
+                        </li>
+                        <li class="nav-item">
+                            <a href="/logout" class="nav-link btn btn-outline-danger" style="color: #dc3545;">Logout</a>
+                        </li>
+                
+                    {% else %}
+                
+                        <li class="nav-item ms-3">
+                            <a href="/login" 
+                               class="nav-link {{ 'active' if request.endpoint == 'login' else '' }}">Login</a>
+                        </li>
+                
+                        <li class="nav-item">
+                            <a href="/register" 
+                               class="nav-link {{ 'active' if request.endpoint == 'register' else '' }}">Get Started</a>
+                        </li>
+                
+                    {% endif %}
+                
+                </ul>
         </header>
     </div>
 
@@ -56,4 +85,3 @@
 </body>
 
 </html>
-
