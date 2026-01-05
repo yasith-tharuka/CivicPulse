@@ -1,0 +1,17 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    hash VARCHAR(255) NOT NULL,
+    district VARCHAR(100) NOT NULL,
+    role VARCHAR(50) NOT NULL
+)
+
+CREATE TABLE incidents (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    severity INTEGER NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

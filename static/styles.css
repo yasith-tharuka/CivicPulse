@@ -1,0 +1,80 @@
+/* Define your Brand Color Variables */
+:root {
+    --civic-orange: #E47D32;
+    --civic-orange-light: #E79438;
+    --civic-dark: #212529; /* Standard Bootstrap dark */
+}
+
+body {
+    padding-top: 70px !important; /* adjust based on your header height */
+}
+
+
+/* Override the Standard 'Primary' Button */
+/* This changes the "Get Started" button automatically */
+.btn-primary {
+    background-color: var(--civic-orange) !important;
+    border-color: var(--civic-orange) !important;
+    color: white !important;
+}
+
+/* Make the Hover State slightly lighter/different */
+.btn-primary:hover {
+    background-color: var(--civic-orange-light) !important;
+    border-color: var(--civic-orange-light) !important;
+}
+
+/* The 'Outline' Button (Login) */
+/* Make the outline orange text, but white background */
+.btn-outline-secondary {
+    color: var(--civic-orange) !important;
+    border-color: var(--civic-orange) !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--civic-orange) !important;
+    color: white !important;
+}
+
+/* Brand Text Highlights */
+/* Use this for specific words you want to pop */
+.text-civic {
+    color: var(--civic-orange);
+}
+
+/*change the color of the border of the footer*/
+footer .border-bottom {
+    border-bottom: 1px solid var(--civic-orange) !important; /*make this as highest priority*/
+  }
+  
+/*Header*/
+header.fixed-top {
+    background-color: rgba(245, 245, 245, 0.5) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /*Header buttons color change*/
+  /*default*/
+  .nav-pills .nav-link {
+    color: #444;                  /* inactive text color */
+    background-color: transparent; /* inactive background */
+    padding: 0.5rem 1rem;          /* Bootstrap default spacing */
+    border-radius: 0.5rem;         /* pill shape */
+    font-size: 1rem;
+    transition: all 0.3s ease;     /* smooth hover/active effect */
+  }
+  /*active button*/
+  .nav-pills .nav-link.active {
+    color: #fff;
+    background-color: var(--civic-orange);
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15); 
+  }
+  /*button hover*/
+  .nav-pills .nav-link:hover {
+    color: black;
+    text-decoration: none;
+  }
+  
+  
