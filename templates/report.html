@@ -6,24 +6,30 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body p-4">
-                    <h2 class="text-center mb-4 fw-bold">Create Account</h2>
+                    <h2 class="text-center mb-4 fw-bold">Report an Issue</h2>
 
-                    <form action="/register" method="post">
+                    {% if error.get('general') %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error['general'] }}
+                        </div>
+                    {% endif %}
+
+                    <form action="/report" method="post">
 
                         <!-- Title -->
                         <div class="mb-3">
-                            <input class="form-control {% if errors.get('title') %}is-invalid{% endif %}" 
+                            <input class="form-control {% if error.get('title') %}is-invalid{% endif %}" 
                                    name="title" placeholder="Title" type="text" required>
-                            {% if errors.get('title') %}
+                            {% if error.get('title') %}
                                 <div class="invalid-feedback">
-                                    {{ errors['title'] }}
+                                    {{ error['title'] }}
                                 </div>
                             {% endif %}
                         </div>
 
                         <!-- Category -->
                         <div class="mb-3">
-                            <select class="form-select {% if errors.get('category') %}is-invalid{% endif %}" 
+                            <select class="form-select {% if error.get('category') %}is-invalid{% endif %}" 
                                     name="category" required>
                                 <option disabled {% if not category %}selected{% endif %}>Select your Category</option>
                                 <option value="Infrastructure" {% if category=="Infrastructure" %}selected{% endif %}>Infrastructure</option>
@@ -32,47 +38,36 @@
                                 <option value="Health" {% if category=="Health" %}selected{% endif %}>Health</option>
                                 <option value="Transport" {% if category=="Transport" %}selected{% endif %}>Transport</option>
                             </select>
-                            {% if errors.get('category') %}
+                            {% if error.get('category') %}
                                 <div class="invalid-feedback">
-                                    {{ errors['category'] }}
+                                    {{ error['category'] }}
                                 </div>
                             {% endif %}
                         </div>
 
                         <!-- Severity -->
                         <div class="mb-3">
-                            <select class="form-select {% if errors.get('severity') %}is-invalid{% endif %}" 
+                            <select class="form-select {% if error.get('severity') %}is-invalid{% endif %}" 
                                     name="severity" required>
                                 <option disabled {% if not severity %}selected{% endif %}>Select Severity</option>
                                 <option value="Low" {% if severity=="Low" %}selected{% endif %}>Low</option>
                                 <option value="Medium" {% if severity=="Medium" %}selected{% endif %}>Medium</option>
                                 <option value="Critical" {% if severity=="Critical" %}selected{% endif %}>Critical</option>
                             </select>
-                            {% if errors.get('severity') %}
+                            {% if error.get('severity') %}
                                 <div class="invalid-feedback">
-                                    {{ errors['severity'] }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <!-- Confirm Password -->
-                        <div class="mb-3">
-                            <input class="form-control {% if errors.get('confirmation') %}is-invalid{% endif %}" 
-                                   name="confirmation" placeholder="Confirm Password" type="password" required>
-                            {% if errors.get('confirmation') %}
-                                <div class="invalid-feedback">
-                                    {{ errors['confirmation'] }}
+                                    {{ error['severity'] }}
                                 </div>
                             {% endif %}
                         </div>
 
                         <!-- Description -->
                         <div class="mb-3">
-                            <textarea class="form-control {% if errors.get('description') %}is-invalid{% endif %}" 
+                            <textarea class="form-control {% if error.get('description') %}is-invalid{% endif %}" 
                                       name="description" rows="3" required>{{ description or '' }}</textarea>
-                            {% if errors.get('description') %}
+                            {% if error.get('description') %}
                                 <div class="invalid-feedback">
-                                    {{ errors['description'] }}
+                                    {{ error['description'] }}
                                 </div>
                             {% endif %}
                         </div>

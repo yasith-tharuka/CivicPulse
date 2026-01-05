@@ -68,7 +68,7 @@ def login():
         if not password or password.strip() =="":
             return render_template("login.html" , error = "Invalid Password")
 
-        rows = db.execute("SELECT * FROM users WHERE username = ?", (username,))
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
 
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"],password):
             return render_template("login.html", error = "Invalid Username or Password")
@@ -84,6 +84,11 @@ def login():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route("/privacy-policy")
+def privacy_policy():
+    return render_template("privacy_policy.html")
+
 
 @app.route('/logout')
 def logout():
@@ -125,7 +130,7 @@ def register():
 
         # Check if username already exists (only if username is provided)
         if username:
-            rows = db.execute("SELECT * FROM users WHERE username = ?", (username,))
+            rows = db.execute("SELECT * FROM users WHERE username = ?", username)
             if len(rows) != 0:
                 errors["username"] = "Username already in Use"
 
@@ -168,13 +173,110 @@ def dashboard():
     if role == "official":
         incidents = db.execute(
             "SELECT incidents.* FROM incidents JOIN users ON incidents.user_id = users.id WHERE users.district = ? ORDER BY incidents.timestamp DESC",
-            (district,))
+            district)
     else:
-        incidents = db.execute("SELECT * FROM incidents WHERE user_id = ? ORDER BY timestamp DESC", (user_id,))
+        incidents = db.execute("SELECT * FROM incidents WHERE user_id = ? ORDER BY timestamp DESC", user_id)
 
     return render_template("dashboard.html", incidents=incidents)
 
+#report
+@app.route("/report", methods=["GET", "POST"])
+@login_required
+def report():
+    error = {}
 
+    if request.method == "GET":
+        return render_template("report.html", error={})
+    if request.method == "POST":
 
+        #-----get inputs-----
+        title = request.form.get("title")
+        category = request.form.get("category")
+        severity = request.form.get("severity")
+        description = request.form.get("description")
+        user_id = session.get("user_id")
+        district = session.get("district")
 
+        #---Error Validation---
+        if not title or not title.strip():
+            error["title"] = "Invalid Title"
+        if not severity: 
+            error["severity"] = "Invalid Severity"
+        if not category:
+            error["category"] = "Invalid Category"
+        
+        # Check if user is logged in
+        if not user_id:
+            error["general"] = "You must be logged in to submit a report"
+        
+        if not district:
+            error["general"] = "District information is missing"
 
+        if error:
+            return render_template("report.html", error=error, title=title or "", category=category or "", severity=severity or "", description=description or "")
+
+        #send data to the database (civicpulse.db)
+        # Pass parameters as separate arguments (CS50 SQL library requirement)
+        # status is required, so we set it to "Pending" for new reports
+        # description can be None/empty, so we use empty string if None
+        db.execute("INSERT INTO incidents (user_id, title, category, district, severity, description, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            user_id, title.strip(), category, district, severity, description or "", "Pending")
+        
+        return redirect(url_for("dashboard"))
+
+#close issue(officials only access)
+@app.route("/resolve", methods=["POST"])
+@login_required
+def resolve():
+    
+    # 1. Security Check: Only Officials can resolve issues
+    if session["role"] != "official":
+        return "Unauthorized", 403
+
+    # 2. Get the incident ID from the hidden form input
+    incident_id = request.form.get("incident_id")
+
+    # 3. Update the database
+    if incident_id:
+        db.execute("UPDATE incidents SET status = 'Resolved' WHERE id = ?", incident_id)
+
+    # 4. Refresh the page
+    return redirect("/dashboard")
+
+#To re-open issue(officials only access)
+@app.route("/reopen", methods=["POST"])
+@login_required
+def reopen():
+    
+    # 1. Security Check
+    if session["role"] != "official":
+        return "Unauthorized", 403
+
+    # 2. Get the ID
+    incident_id = request.form.get("incident_id")
+
+    # 3. Update the database (Set status back to 'Open')
+    if incident_id:
+        db.execute("UPDATE incidents SET status = 'Open' WHERE id = ?", incident_id)
+
+    # 4. Refresh
+    return redirect("/dashboard")
+
+#delete issue(officials only access)
+@app.route("/delete", methods=["POST"])
+@login_required
+def delete():
+    
+    # 1. Security Check: Only Officials can delete
+    if session["role"] != "official":
+        return "Unauthorized", 403
+
+    # 2. Get the ID
+    incident_id = request.form.get("incident_id")
+
+    # 3. Delete from database
+    if incident_id:
+        db.execute("DELETE FROM incidents WHERE id = ?", incident_id)
+
+    # 4. Refresh page
+    return redirect("/dashboard")
