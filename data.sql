@@ -1,17 +1,20 @@
+-- Users table
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(100) NOT NULL UNIQUE,
-    hash VARCHAR(255) NOT NULL,
-    district VARCHAR(100) NOT NULL,
-    role VARCHAR(50) NOT NULL
-)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    hash TEXT NOT NULL,
+    district TEXT NOT NULL,
+    role TEXT NOT NULL
+);
 
+-- Incidents table
 CREATE TABLE incidents (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    title VARCHAR(255) NOT NULL,
-    category VARCHAR(100) NOT NULL,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    category TEXT NOT NULL,
     severity INTEGER NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    status TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

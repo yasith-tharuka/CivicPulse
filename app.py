@@ -43,7 +43,32 @@ def register():
 
 @app.route('/login' , methods=["GET", "POST"])
 def login():
-    return render_template('login.html')
+    session.clear()
+    if request.method == "GET" :
+        return render_template("login.html")
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        #Validate username --Ensure fields not empty--
+        if not username or username.strip() == "":
+            return render_template("login.html" , error = "Invalid Username")
+        #Validate password
+        if not password or password.strip() =="":
+            return render_template("login.html" , error = "Invalid Password")
+
+        rows = db.execute("SELECT * FROM users WHERE username = ?", (username,))
+
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"],password):
+            return render_template("login.html", error = "Invalid Username or Password")
+
+        session["user_id"] = rows[0]["id"]
+        session["role"] = rows[0]["role"]
+        session["district"] = rows[0]["district"]
+
+        return redirect("/")
+
 
 @app.route('/about')
 def about():

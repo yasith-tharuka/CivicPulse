@@ -6,16 +6,32 @@
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h2 class="text-center mb-4 fw-bold">Create Account</h2>
+                        <h2 class="text-center mb-4 fw-bold">Login</h2>
                         
-                        <form action="/register" method="post">
-                            
+                        <form action="/login" method="post">
+                            {% if error == "Invalid Username or Password" %}
+                                <div class="alert alert-danger text-center mb-3">
+                                    {{ error }}
+                                </div>
+                            {% endif %}
+                    
                             <div class="mb-3">
-                                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required>
+                                <input autocomplete="off" autofocus class="form-control {% if error == 'Invalid Username' %}is-invalid{% endif %}" name="username" placeholder="Username" type="text" >
+                                {% if error == "Invalid Username" %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                {% endif %}                            
                             </div>
 
+
                             <div class="mb-3">
-                                <input class="form-control" name="password" placeholder="Password" type="password" required>
+                                <input class="form-control {% if error == 'Invalid Password' %}is-invalid{% endif%}" name="password" placeholder="Password" type="password" >
+                                {% if error == "Invalid Password" %}
+                                    <div class ="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <div class="d-grid gap-2">
