@@ -6,7 +6,10 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h2 class="fw-bold">Dashboard</h2>
-                <p class="text-muted">District: {{ session["district"] }} | Role: {{ session["role"].capitalize() }}</p>
+                <p class="text-muted mb-0">
+                    District: <span class="text-civic fw-bold">{{ session["district"] }}</span> | 
+                    Role: {{ session["role"].capitalize() }}
+                </p>
             </div>
             <a href="/report" class="btn btn-primary">+ Report Incident</a>
         </div>
@@ -35,25 +38,22 @@
                                 <small class="text-muted">{{ incident.timestamp }}</small>
                                 
                                 {% if incident.status == 'Resolved' %}
-                                    <span class="text-success fw-bold">Resolved</span>
+                                    <span class="text-success fw-bold">✔ Resolved</span>
                                 {% else %}
-                                    <span class="text-civic fw-bold">Open</span>
+                                    <span class="text-civic fw-bold">⚠ Open</span>
                                 {% endif %}
                             </div>
-                            
-                            {% if session["role"] == 'official' %}
-                                <div class="mt-2 d-grid">
-                                    <a href="#" class="btn btn-sm btn-outline-secondary">Update Status</a>
-                                </div>
-                            {% endif %}
 
                         </div>
                     </div>
                 </div>
             {% else %}
                 <div class="col-12 text-center py-5">
-                    <h4 class="text-muted">No incidents reported yet.</h4>
-                    <a href="/report" class="btn btn-link">Report your first issue</a>
+                    <div class="p-5 bg-light rounded-3">
+                        <h3 class="text-muted">No incidents found.</h3>
+                        <p>Everything looks good</p>
+                        <a href="/report" class="btn btn-primary mt-3">Report an Issue</a>
+                    </div>
                 </div>
             {% endfor %}
 

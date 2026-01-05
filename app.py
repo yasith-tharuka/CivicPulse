@@ -1,7 +1,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
@@ -20,6 +20,19 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///civicpulse.db")
+
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+    https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.after_request
 def after_request(response):
@@ -64,7 +77,8 @@ def login():
         session["role"] = rows[0]["role"]
         session["district"] = rows[0]["district"]
 
-        return redirect("/")
+        return redirect(url_for("dashboard"))
+
 
 
 @app.route('/about')
@@ -134,11 +148,31 @@ def register():
         session["role"] = "citizen"
         session["district"] = district
         
-        return redirect("/")
+        return redirect(url_for("dashboard"))
+
 
         
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    """Show the dashboard"""
+    
+    # Get current user details from session
+    user_id = session["user_id"]
+    role = session["role"]
+    district = session["district"]
 
+    # LOGIC: 
+    # If Official -> See ALL reports in their district
+    # If Citizen -> See ONLY reports they submitted
+    if role == "official":
+        incidents = db.execute(
+            "SELECT incidents.* FROM incidents JOIN users ON incidents.user_id = users.id WHERE users.district = ? ORDER BY incidents.timestamp DESC",
+            (district,))
+    else:
+        incidents = db.execute("SELECT * FROM incidents WHERE user_id = ? ORDER BY timestamp DESC", (user_id,))
 
+    return render_template("dashboard.html", incidents=incidents)
 
 
 

@@ -21,10 +21,21 @@
                 </svg> <span class="fs-4">CivicPulse</span> </a>
                 <ul class="nav nav-pills align-items-center">
     
+                    {% if session["user_id"] %}
+
+                    <li class="nav-item">
+                        <a href="{{ url_for('dashboard') }}" 
+                           class="nav-link {{ 'active' if request.endpoint == 'dashboard' else '' }}">Dashboard</a>
+                    </li>
+
+                    {% else %}
+
                     <li class="nav-item">
                         <a href="{{ url_for('index') }}" 
                            class="nav-link {{ 'active' if request.endpoint == 'index' else '' }}">Home</a>
                     </li>
+                    
+                    {% endif %}
                 
                     <li class="nav-item">
                         <a href="{{ url_for('about') }}" 
