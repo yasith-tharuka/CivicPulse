@@ -20,3 +20,4 @@ CREATE TABLE incidents (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
