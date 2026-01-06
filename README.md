@@ -83,3 +83,19 @@ During development, I faced several architectural decisions where I had to weigh
 ### Install Dependencies
 ```bash
 pip install -r requirements.txt
+
+---
+
+## Default Official Account
+
+For demonstration purposes, an **official user account** has been preconfigured. Since officials cannot be registered directly through the web interface, this account must be created manually using the SQLite terminal.
+
+- **Username:** `admin`  
+- **Password:** `2345`  
+
+### How to Create the Official Account
+Open the SQLite shell and insert the record into the `users` table:
+
+```sql
+INSERT INTO users (username, hash, role, district)
+VALUES ('admin', '<hashed_password>', 'official', 'Colombo');
