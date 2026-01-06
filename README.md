@@ -9,7 +9,7 @@
 
 ## Description
 
-CivicPulse is a web-based infrastructure reporting tool designed to solve a problem I witness daily in rapidly developing cities: the communication disconnect between citizens and local government authorities. In many urban areas, critical infrastructure failures—such as broken streetlamps, burst water pipes, uncollected trash, or potholes—often go unnoticed for days or weeks. This isn't because the authorities don't care, but because the reporting mechanisms are often archaic, opaque, or non-existent.
+CivicPulse is a web-based infrastructure reporting tool designed to solve a problem I witness daily in rapidly developing cities: the communication disconnect between citizens and local government authorities. In many urban areas, critical infrastructure failures-such as broken streetlamps, burst water pipes, uncollected trash, or potholes-often go unnoticed for days or weeks. This isn't because the authorities don't care, but because the reporting mechanisms are often archaic, opaque, or non-existent.
 
 I built CivicPulse to bridge this gap. It serves as a centralized platform where citizens can report hazards in real-time, categorizing them by severity and type. Simultaneously, it provides local officials with a streamlined dashboard where they can track, prioritize, and resolve these issues based on their assigned district. By turning decentralized citizen observations into actionable engineering data, CivicPulse aims to improve urban safety and response times.
 
