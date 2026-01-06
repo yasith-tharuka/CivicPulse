@@ -3,7 +3,6 @@
 #### Video Demo: [https://youtu.be/OSHGc8cnW6U](https://youtu.be/OSHGc8cnW6U)  
 #### Developer: Yasith Tharuka  
 #### Email: tharukayasith8@gmail.com  
-#### Location: Pitabeddara, Sri Lanka  
 
 ---
 
